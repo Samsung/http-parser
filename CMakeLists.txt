@@ -6,25 +6,24 @@ set(targetName httpparser)
 
 INCLUDE_DIRECTORIES(./)
 
-if(NOT${BUILDTYPE})
-  set(BUILDTYPE "Debug")
-endif()
-
-
-if(${OS} MATCHES "NUTTX|TIZENRT")
+if("${OS}" MATCHES "NUTTX|TIZENRT")
   set(TARGET_INCLUDE "${NUTTX_HOME}/include")
   set(TARGET_INCLUDE ${TARGET_INCLUDE} "${NUTTX_HOME}/include/cxx")
   INCLUDE_DIRECTORIES(./ ${TARGET_INCLUDE})
 endif()
 
-set(CFLAGS "${CFLAGS} ${CMAKE_CXX_FLAGS}")
 
-
-if("${BUILDTYPE}" STREQUAL "Release")
-  set(CFLAGS "${CFLAGS} -Os")
+if("${CMAKE_BUILD_TYPE}" MATCHES "Release|MinSizeRel")
+  # If we are building for release modify it to MinSizeRel for -Os option.
+  set(CMAKE_BUILD_TYPE "MinSizeRel")
 else()
-  set(CFLAGS "${CFLAGS} -g")
+  # Any other case just assume debug build.
+  set(CMAKE_BUILD_TYPE "Debug")
 endif()
 
+message("HTTP Parser configured with:")
+message(STATUS "CMAKE_BUILD_TYPE     ${CMAKE_BUILD_TYPE}")
+message(STATUS "OS                   ${OS}")
+message(STATUS "NUTTX_HOME           ${NUTTX_HOME}")
+
 ADD_LIBRARY(${targetName} STATIC http_parser.c)
-set_target_properties(${targetName} PROPERTIES COMPILE_FLAGS ${CFLAGS})
