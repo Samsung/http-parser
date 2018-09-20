@@ -123,7 +123,7 @@ do {                                                                 \
     FOR##_mark = NULL;                                               \
   }                                                                  \
 } while (0)
-  
+
 /* Run the data callback FOR and consume the current byte */
 #define CALLBACK_DATA(FOR)                                           \
     CALLBACK_DATA_(FOR, p - FOR##_mark, p - data + 1)
@@ -171,7 +171,7 @@ do {                                                                 \
 #define CLOSE "close"
 
 
-static const char *method_strings[] =
+static const char * const method_strings[] =
   {
 #define XX(num, name, string) #string,
   HTTP_METHOD_MAP(XX)
@@ -461,7 +461,7 @@ do {                                                                 \
 static struct {
   const char *name;
   const char *description;
-} http_strerror_tab[] = {
+} const http_strerror_tab[] = {
   HTTP_ERRNO_MAP(HTTP_STRERROR_GEN)
 };
 #undef HTTP_STRERROR_GEN
